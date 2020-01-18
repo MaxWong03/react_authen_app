@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 
 const Registration = () => {
@@ -9,9 +10,23 @@ const Registration = () => {
     registrationErrors: ''
   })
 
-  const onSubmit = event => {
+  const { email, password, passwordConfirmation, registrationErrors } = info;
+
+  const onSubmit = async event => {
     event.preventDefault();
-    console.log('info:', info);
+    try {
+      const res = await axios.post("http://localhost:3001/registrations", {
+        user: {
+          email,
+          password,
+          passwordConfirmation
+        }
+      }, { withCredentials: true });
+      console.log(res)
+    } catch(err) {
+      console.log(err)
+    }
+
   }
 
   const onChange = event => {
@@ -24,8 +39,6 @@ const Registration = () => {
       }
     })
   }
-
-  const { email, password, passwordConfirmation, registrationErrors } = info;
 
   return (
     <div>
