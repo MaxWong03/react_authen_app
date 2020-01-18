@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useHistory } from "react-router-dom";
 
-
-const Registration = () => {
+const Registration = ({ handleSuccessfulAuth }) => {
   const [info, setInfo] = useState({
     email: '',
     password: '',
@@ -11,6 +11,7 @@ const Registration = () => {
   })
 
   const { email, password, passwordConfirmation, registrationErrors } = info;
+  console.log('useHistory', useHistory)
 
   const onSubmit = async event => {
     event.preventDefault();
@@ -23,7 +24,11 @@ const Registration = () => {
         }
       }, { withCredentials: true });
       console.log(res)
-    } catch(err) {
+      if (res.data.status === 'created') {
+        handleSuccessfulAuth(res.data);
+        history.push('/dashboard');
+      }
+    } catch (err) {
       console.log(err)
     }
 
